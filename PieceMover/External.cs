@@ -1,47 +1,20 @@
 ﻿namespace PieceMover
 {
+    using System.Dynamic;
+    using System.Linq;
     using ExternalInput;
     using System.Runtime.InteropServices;
+    using System.Threading;
 
     //https://stackoverflow.com/a/20493025/2612547
     public class External
     {
-        public void SendInputWithAPI()
+        public void SendMove(Move move)
         {
-            INPUT[] Inputs = new INPUT[6];
-            INPUT Input = new INPUT();
+            var inputs = move.Read();
+            SendInput((uint)inputs.Length, inputs, INPUT.Size);
 
-            Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.SHIFT;
-            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
-            Inputs[0] = Input;
-
-            Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.KEY_N;
-            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
-            Inputs[1] = Input;
-
-            Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.KEY_N;
-            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE | KEYEVENTF.KEYUP;
-            Inputs[2] = Input;
-
-            Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.SHIFT;
-            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE | KEYEVENTF.KEYUP;
-            Inputs[3] = Input;
-
-            Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.KEY_C;
-            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
-            Inputs[4] = Input;
-
-            Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.KEY_3;
-            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
-            Inputs[5] = Input;
-
-            SendInput(6, Inputs, INPUT.Size);
+            Thread.Sleep(30);
         }
 
         /// <summary>
