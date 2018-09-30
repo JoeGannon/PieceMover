@@ -6,27 +6,46 @@ namespace PieceMover
 {
     using System.Runtime.InteropServices;
 
-
-
     //https://stackoverflow.com/a/20493025/2612547
     public class External
     {
         public void SendInputWithAPI()
         {
-            INPUT[] Inputs = new INPUT[4];
+            INPUT[] Inputs = new INPUT[6];
             INPUT Input = new INPUT();
 
+
             Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.KEY_E;
+            Input.U.ki.wScan = ScanCodeShort.SHIFT;
             Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
             Inputs[0] = Input;
 
             Input.type = 1; // 1 = Keyboard Input
-            Input.U.ki.wScan = ScanCodeShort.KEY_4;
+            Input.U.ki.wScan = ScanCodeShort.KEY_N;
             Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
             Inputs[1] = Input;
 
-            SendInput(2, Inputs, INPUT.Size);
+            Input.type = 1; // 1 = Keyboard Input
+            Input.U.ki.wScan = ScanCodeShort.KEY_N;
+            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE | KEYEVENTF.KEYUP;
+            Inputs[2] = Input;
+
+            Input.type = 1; // 1 = Keyboard Input
+            Input.U.ki.wScan = ScanCodeShort.SHIFT;
+            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE | KEYEVENTF.KEYUP;
+            Inputs[3] = Input;
+
+            Input.type = 1; // 1 = Keyboard Input
+            Input.U.ki.wScan = ScanCodeShort.KEY_C;
+            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
+            Inputs[4] = Input;
+
+            Input.type = 1; // 1 = Keyboard Input
+            Input.U.ki.wScan = ScanCodeShort.KEY_3;
+            Input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
+            Inputs[5] = Input;
+
+            SendInput(6, Inputs, INPUT.Size);
         }
 
         /// <summary>
