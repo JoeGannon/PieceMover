@@ -1,7 +1,6 @@
 ﻿// ReSharper disable StringIndexOfIsCultureSpecific.1
 namespace PieceMover
 {
-    using System.Collections;
     using ExternalInput;
     using Moves;
     using Pieces;
@@ -15,10 +14,7 @@ namespace PieceMover
         {
             var move = default(Input);
 
-            if (input.IsPromotionMove())
-                move = PromotionMove(input);
-
-            else if (input.IsPawnMove())
+            if (input.IsPawnMove())
                 move = PawnMove(input);
 
             else if (input.IsPawnTakesMove())
@@ -29,6 +25,12 @@ namespace PieceMover
 
             else if (input.IsPieceMove())
                 move = PieceMove(input);
+
+            if (input.IsPromotionMove())
+                move = PromotionMove(input);
+
+            if (input.IsPromotionTakesMove())
+                move = PromotionTakesMove(input);
 
             return move;
         }
@@ -51,15 +53,20 @@ namespace PieceMover
 
         private static bool IsTakesMove(this string move) => move.Contains("x");
 
-        private static bool IsPieceMove(this string move) => move.Contains("N") ||
+        private static bool IsPieceMove(this string move) => (move.Contains("N") ||
                                                              move.Contains("B") ||
                                                              move.Contains("R") ||
                                                              move.Contains("Q") ||
-                                                             move.Contains("K");
+                                                             move.Contains("K")) && !IsPromotionMove(move);
 
         private static bool IsPieceTakesMove(this string move)
         {
             return move.Contains("x") && IsPieceMove(move);
+        }
+
+        private static bool IsPromotionTakesMove(this string move)
+        {
+            return move.Contains("=") && move.Contains("x");
         }
 
         private static bool IsPromotionMove(this string move)
@@ -108,6 +115,15 @@ namespace PieceMover
             var square = GetSquare(move.Substring(0, 2));
 
             return new Promotion(new Move(square), piece);
+        }
+
+        private static Input PromotionTakesMove(string move)
+        {
+            var piece = GetPiece(move.Substring(move.Length - 1, 1));
+            var square = GetSquare(move.Substring(move.IndexOf("x") + 1, 2));
+            var file = GetFile(move.Substring(0, 1));
+
+            return new Promotion(new PawnTakesMove(file, square), piece);
         }
 
         private static Square GetSquare(string move)
@@ -200,7 +216,7 @@ namespace PieceMover
             var type = piece.Substring(0, 1);
             Piece pieceType;
 
-            if (piece.Length == 2)
+            if (piece.Length >= 2)
             {
                 pieceType = NewUp(piece.Substring(1, 1));
             }
