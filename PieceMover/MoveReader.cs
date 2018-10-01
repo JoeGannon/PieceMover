@@ -24,6 +24,9 @@ namespace PieceMover
             else if (input.IsPieceTakesMove())
                 move = PieceTakesMove(input);
 
+            else if (input.IsPieceMove())
+                move = PieceMove(input);
+
             return move;
         }
 
@@ -45,14 +48,15 @@ namespace PieceMover
 
         private static bool IsTakesMove(this string move) => move.Contains("x");
 
+        private static bool IsPieceMove(this string move) => move.Contains("N") ||
+                                                             move.Contains("B") ||
+                                                             move.Contains("R") ||
+                                                             move.Contains("Q") ||
+                                                             move.Contains("K");
+
         private static bool IsPieceTakesMove(this string move)
         {
-            return move.Contains("x") &&
-                   (move.Contains("N") ||
-                    move.Contains("B") ||
-                    move.Contains("R") ||
-                    move.Contains("Q") ||
-                    move.Contains("K"));
+            return move.Contains("x") && IsPieceMove(move);
         }
 
         private static Move PawnMove(string move)
@@ -79,6 +83,15 @@ namespace PieceMover
             var piece = GetPiece(pieceInput);
 
             return new TakeMove(piece, square);
+        }
+
+        private static Move PieceMove(string move)
+        {
+            var square = GetSquare(move);
+
+            var piece = GetPiece(move);
+
+            return new Move(piece, square);
         }
 
         private static Square GetSquare(string move)
