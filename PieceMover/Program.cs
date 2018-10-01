@@ -53,5 +53,16 @@
 
             return move == "cleared" ? "" : move;
         }
+
+        private static async Task<string> SetMove(string move)
+        {
+            var values = new KeyValuePair<string, string>("move", move);
+
+            var result = await _client.PostAsync("set", new FormUrlEncodedContent(new List<KeyValuePair<string, string>> { values }));
+
+            var moveResult = await result.Content.ReadAsStringAsync();
+
+            return moveResult;
+        }
     }
 }

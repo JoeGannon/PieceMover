@@ -112,7 +112,7 @@ namespace PieceMover
         {
             var square = GetSquare(move);
 
-            var piece = GetPiece(move);
+            var piece = GetPiece(move.Substring(0, move.Length - 2));
 
             return new Move(piece, square);
         }
@@ -142,13 +142,13 @@ namespace PieceMover
             {
                 castle = Castle.Long();
             }
-            
+
             return castle;
         }
 
         private static Square GetSquare(string move)
         {
-            var file = move.Substring(move.Length -2, 1);
+            var file = move.Substring(move.Length - 2, 1);
             var rank = move.Substring(move.Length - 1, 1);
             var square = new Square(GetFile(file), GetRank(rank));
 
