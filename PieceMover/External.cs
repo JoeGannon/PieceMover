@@ -1,5 +1,6 @@
 ﻿namespace PieceMover
 {
+    using System.Linq;
     using ExternalInput;
     using System.Runtime.InteropServices;
     using System.Threading;
@@ -10,6 +11,21 @@
         public void SendMove(Input move)
         {
             var inputs = move.GetInputs();
+
+            SendInput((uint)inputs.Length, inputs, INPUT.Size);
+
+            Thread.Sleep(30);
+        }
+
+        public void SendEnter()
+        {
+            var input = new INPUT { type = 1 };
+
+            input.U.ki.wScan = ScanCodeShort.RETURN;
+            input.U.ki.dwFlags = KEYEVENTF.SCANCODE;
+
+            var inputs = new[] { input };
+
             SendInput((uint)inputs.Length, inputs, INPUT.Size);
 
             Thread.Sleep(30);
