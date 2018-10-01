@@ -11,11 +11,14 @@ namespace PieceMover
         private const ScanCodeShort NullRank = ScanCodeShort.KEY_9;
         private const ScanCodeShort NullFile = ScanCodeShort.KEY_I;
 
-        public static Move ReadMove(string input)
+        public static Input ReadMove(string input)
         {
-            var move = default(Move);
+            var move = default(Input);
 
-            if (input.IsPawnMove())
+            if (input.IsPromotionMove())
+                move = PromotionMove(input);
+
+            else if (input.IsPawnMove())
                 move = PawnMove(input);
 
             else if (input.IsPawnTakesMove())
@@ -59,6 +62,11 @@ namespace PieceMover
             return move.Contains("x") && IsPieceMove(move);
         }
 
+        private static bool IsPromotionMove(this string move)
+        {
+            return move.Contains("=");
+        }
+
         private static Move PawnMove(string move)
         {
             var square = GetSquare(move);
@@ -92,6 +100,14 @@ namespace PieceMover
             var piece = GetPiece(move);
 
             return new Move(piece, square);
+        }
+
+        private static Input PromotionMove(string move)
+        {
+            var piece = GetPiece(move.Substring(move.Length - 1, 1));
+            var square = GetSquare(move.Substring(0, 2));
+
+            return new Promotion(new Move(square), piece);
         }
 
         private static Square GetSquare(string move)
