@@ -4,9 +4,13 @@ namespace PieceMover
     using System.Collections;
     using ExternalInput;
     using Moves;
+    using Pieces;
 
     public static class MoveReader
     {
+        private const ScanCodeShort NullRank = ScanCodeShort.KEY_9;
+        private const ScanCodeShort NullFile = ScanCodeShort.KEY_I;
+
         public static Move ReadMove(string input)
         {
             var move = default(Move);
@@ -16,6 +20,9 @@ namespace PieceMover
 
             else if (input.IsPawnTakesMove())
                 move = PawnTakesMove(input);
+
+            else if (input.IsPieceTakesMove())
+                move = PieceTakesMove(input);
 
             return move;
         }
@@ -30,13 +37,23 @@ namespace PieceMover
 
                 var pawn = move.Substring(0, takes);
 
-                return pawn.Length == 1;
+                return pawn.Length == 1 && GetPiece(move) == null;
             }
 
             return false;
         }
 
         private static bool IsTakesMove(this string move) => move.Contains("x");
+
+        private static bool IsPieceTakesMove(this string move)
+        {
+            return move.Contains("x") &&
+                   (move.Contains("N") ||
+                    move.Contains("B") ||
+                    move.Contains("R") ||
+                    move.Contains("Q") ||
+                    move.Contains("K"));
+        }
 
         private static Move PawnMove(string move)
         {
@@ -48,15 +65,26 @@ namespace PieceMover
         private static Move PawnTakesMove(string move)
         {
             var pawn = GetFile(move.Substring(0, 1));
-            var square = GetSquare(move.Substring(move.Length - 2));
+            var square = GetSquare(move);
 
             return new PawnTakesMove(pawn, square);
         }
 
+        private static Move PieceTakesMove(string move)
+        {
+            var square = GetSquare(move);
+
+            var pieceInput = move.Substring(0, move.IndexOf("x"));
+
+            var piece = GetPiece(pieceInput);
+
+            return new TakeMove(piece, square);
+        }
+
         private static Square GetSquare(string move)
         {
-            var file = move.Substring(0, 1);
-            var rank = move.Substring(1);
+            var file = move.Substring(move.Length -2, 1);
+            var rank = move.Substring(move.Length - 1, 1);
             var square = new Square(GetFile(file), GetRank(rank));
 
             return square;
@@ -93,7 +121,7 @@ namespace PieceMover
                     fileKey = ScanCodeShort.KEY_H;
                     break;
                 default:
-                    fileKey = ScanCodeShort.KEY_I;
+                    fileKey = NullFile;
                     break;
             }
 
@@ -131,11 +159,71 @@ namespace PieceMover
                     rankKey = ScanCodeShort.KEY_8;
                     break;
                 default:
-                    rankKey = ScanCodeShort.KEY_9;
+                    rankKey = NullRank;
                     break;
             }
 
             return rankKey;
+        }
+
+        private static Piece GetPiece(string piece)
+        {
+            var type = piece.Substring(0, 1);
+            Piece pieceType;
+
+            if (piece.Length == 2)
+            {
+                pieceType = NewUp(piece.Substring(1, 1));
+            }
+            else
+            {
+                pieceType = NewUp();
+            }
+
+            return pieceType;
+
+            Piece NewUp(string id = null)
+            {
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    var rank = GetRank(id);
+                    var file = GetFile(id);
+
+                    var val = rank == NullRank ? file : rank;
+
+                    switch (type)
+                    {
+                        case "N":
+                            return new Knight(val);
+                        case "B":
+                            return new Bishop(val);
+                        case "R":
+                            return new Rook(val);
+                        case "Q":
+                            return new Queen(val);
+                        default:
+                            return default(Piece);
+                    }
+                }
+                else
+                {
+                    switch (type)
+                    {
+                        case "N":
+                            return new Knight();
+                        case "B":
+                            return new Bishop();
+                        case "R":
+                            return new Rook();
+                        case "Q":
+                            return new Queen();
+                        case "K":
+                            return new King();
+                        default:
+                            return default(Piece);
+                    }
+                }
+            }
         }
     }
 }
