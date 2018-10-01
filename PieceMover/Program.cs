@@ -12,10 +12,17 @@
 
             while (!string.IsNullOrWhiteSpace(input))
             {
-                var move = MoveReader.ReadMove(input);
+                try
+                {
+                    var move = MoveReader.ReadMove(input);
 
-                Send(move);
-                SendEnter();
+                    Send(move);
+                    SendEnter();
+                }
+                catch (Exception)
+                {
+                    //ignore junk
+                }
 
                 Console.ReadLine();
 
