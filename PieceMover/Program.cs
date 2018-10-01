@@ -13,7 +13,7 @@
         static void Main(string[] args)
         {
             //Test();
-
+            //todo castle
             var input = Console.ReadLine();
 
             while (!string.IsNullOrWhiteSpace(input))
