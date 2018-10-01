@@ -24,9 +24,16 @@
         {
             var inputs = _piece?.GetInputs().ToList() ?? new List<INPUT>();
 
+            var action = Action();
+
+            if (action.HasValue)
+                inputs.Add(action.Value);
+
             inputs.AddRange(_square.GetInputs());
 
             return inputs.ToArray();
         }
+
+        public virtual INPUT? Action() => null;
     }
 }
