@@ -32,6 +32,9 @@ namespace PieceMover
             if (input.IsPromotionTakesMove())
                 move = PromotionTakesMove(input);
 
+            else if (input.IsCastles())
+                move = CastlesMove(input);
+
             return move;
         }
 
@@ -72,6 +75,11 @@ namespace PieceMover
         private static bool IsPromotionMove(this string move)
         {
             return move.Contains("=");
+        }
+
+        private static bool IsCastles(this string move)
+        {
+            return move.Contains("o-");
         }
 
         private static Move PawnMove(string move)
@@ -124,6 +132,18 @@ namespace PieceMover
             var file = GetFile(move.Substring(0, 1));
 
             return new Promotion(new PawnTakesMove(file, square), piece);
+        }
+
+        private static Input CastlesMove(string move)
+        {
+            var castle = Castle.Short();
+
+            if (move.Length > 3)
+            {
+                castle = Castle.Long();
+            }
+            
+            return castle;
         }
 
         private static Square GetSquare(string move)
