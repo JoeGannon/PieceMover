@@ -1,4 +1,5 @@
-﻿namespace PieceMover
+﻿// ReSharper disable StringIndexOfIsCultureSpecific.1
+namespace PieceMover
 {
     using System.Collections;
     using ExternalInput;
@@ -11,26 +12,54 @@
             var move = default(Move);
 
             if (input.IsPawnMove())
-                move = new Move(GetSquare(input));
+                move = PawnMove(input);
+
+            else if (input.IsPawnTakesMove())
+                move = PawnTakesMove(input);
 
             return move;
         }
 
         private static bool IsPawnMove(this string move) => move.Length == 2;
 
-        private static Square GetSquare(string move)
+        private static bool IsPawnTakesMove(this string move)
         {
-            var square = ToSquare(move);
+            if (move.IsTakesMove())
+            {
+                var takes = move.IndexOf("x");
 
-            return square;
+                var pawn = move.Substring(0, takes);
+
+                return pawn.Length == 1;
+            }
+
+            return false;
         }
 
-        private static Square ToSquare(string move)
+        private static bool IsTakesMove(this string move) => move.Contains("x");
+
+        private static Move PawnMove(string move)
+        {
+            var square = GetSquare(move);
+
+            return new Move(square);
+        }
+
+        private static Move PawnTakesMove(string move)
+        {
+            var pawn = GetFile(move.Substring(0, 1));
+            var square = GetSquare(move.Substring(move.Length - 2));
+
+            return new PawnTakesMove(pawn, square);
+        }
+
+        private static Square GetSquare(string move)
         {
             var file = move.Substring(0, 1);
             var rank = move.Substring(1);
+            var square = new Square(GetFile(file), GetRank(rank));
 
-            return new Square(GetFile(file), GetRank(rank));
+            return square;
         }
 
         private static ScanCodeShort GetFile(string file)
