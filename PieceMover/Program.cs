@@ -1,6 +1,10 @@
 ﻿namespace PieceMover
 {
     using System;
+    using System.Threading;
+    using ExternalInput;
+    using Moves;
+    using Pieces;
 
     class Program
     {
@@ -8,6 +12,8 @@
 
         static void Main(string[] args)
         {
+            //Test();
+
             var input = Console.ReadLine();
 
             while (!string.IsNullOrWhiteSpace(input))
@@ -28,6 +34,13 @@
 
                 input = Console.ReadLine();
             }
+        }
+
+        private static void Test()
+        {
+            Thread.Sleep(2000);
+            Send(new Move(new Knight(), new Square(ScanCodeShort.KEY_C, ScanCodeShort.KEY_3)));
+            SendEnter();
         }
 
         private static void Send(Input move) => _external.SendMove(move);
