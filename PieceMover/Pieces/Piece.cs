@@ -1,4 +1,4 @@
-﻿namespace PieceMover
+﻿namespace PieceMover.Pieces
 {
     using System.Collections.Generic;
     using ExternalInput;

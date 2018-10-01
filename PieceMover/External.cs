@@ -1,7 +1,5 @@
 ﻿namespace PieceMover
 {
-    using System.Dynamic;
-    using System.Linq;
     using ExternalInput;
     using System.Runtime.InteropServices;
     using System.Threading;
@@ -9,9 +7,9 @@
     //https://stackoverflow.com/a/20493025/2612547
     public class External
     {
-        public void SendMove(Move move)
+        public void SendMove(Input move)
         {
-            var inputs = move.Read();
+            var inputs = move.GetInputs();
             SendInput((uint)inputs.Length, inputs, INPUT.Size);
 
             Thread.Sleep(30);

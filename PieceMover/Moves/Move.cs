@@ -1,10 +1,11 @@
-﻿namespace PieceMover
+﻿namespace PieceMover.Moves
 {
     using System.Collections.Generic;
     using System.Linq;
     using ExternalInput;
+    using Pieces;
 
-    public class Move
+    public class Move : Input
     {
         private readonly Square _square;
         private readonly Piece _piece;
@@ -20,20 +21,17 @@
             _square = square;
         }
 
-        public INPUT[] Read()
+        public INPUT[] GetInputs()
         {
             var inputs = _piece?.GetInputs().ToList() ?? new List<INPUT>();
 
-            var action = Action();
-
-            if (action.HasValue)
-                inputs.Add(action.Value);
+            inputs.AddRange(Actions());
 
             inputs.AddRange(_square.GetInputs());
 
             return inputs.ToArray();
         }
 
-        public virtual INPUT? Action() => null;
+        public virtual INPUT[] Actions() => new INPUT[0];
     }
 }
