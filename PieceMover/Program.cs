@@ -12,7 +12,12 @@
         private static readonly HttpClient _client = new HttpClient
         {
             BaseAddress = new Uri("http://192.168.50.40:5000/"),
-            DefaultRequestHeaders = { Accept = { new MediaTypeWithQualityHeaderValue("text/html") } }
+            DefaultRequestHeaders =
+            {
+                Accept = { new MediaTypeWithQualityHeaderValue("text/html") },
+                Authorization = new AuthenticationHeaderValue("Basic",
+                    "c3VwZXJzZWNyZXR1c2VyOmpjd2h5ZG93ZWFsd2F5c25lZWRzb21lc3R1cGlkYXV0aA==")
+            }
         };
 
         private static readonly External _external = new External();

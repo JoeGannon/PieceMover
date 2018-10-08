@@ -48,7 +48,7 @@ namespace PieceMover
 
                 var pawn = move.Substring(0, takes);
 
-                return pawn.Length == 1 && GetPiece(move) == null;
+                return pawn.Length == 1 && !IsPieceMove(move);
             }
 
             return false;
