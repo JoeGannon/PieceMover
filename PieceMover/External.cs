@@ -1,6 +1,5 @@
 ﻿namespace PieceMover
 {
-    using System.Linq;
     using ExternalInput;
     using System.Runtime.InteropServices;
     using System.Threading;

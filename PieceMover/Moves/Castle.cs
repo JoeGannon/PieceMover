@@ -1,6 +1,5 @@
-﻿namespace PieceMover
+﻿namespace PieceMover.Moves
 {
-    using System;
     using System.Collections.Generic;
     using ExternalInput;
 

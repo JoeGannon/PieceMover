@@ -16,7 +16,7 @@
             {
                 Accept = { new MediaTypeWithQualityHeaderValue("text/html") },
                 Authorization = new AuthenticationHeaderValue("Basic",
-                    "c3VwZXJzZWNyZXR1c2VyOmpjd2h5ZG93ZWFsd2F5c25lZWRzb21lc3R1cGlkYXV0aA==")
+                    "")
             }
         };
 
@@ -57,17 +57,6 @@
             var move = await result2.Content.ReadAsStringAsync();
 
             return move == "cleared" ? "" : move;
-        }
-
-        private static async Task<string> SetMove(string move)
-        {
-            var values = new KeyValuePair<string, string>("move", move);
-
-            var result = await _client.PostAsync("set", new FormUrlEncodedContent(new List<KeyValuePair<string, string>> { values }));
-
-            var moveResult = await result.Content.ReadAsStringAsync();
-
-            return moveResult;
         }
     }
 }

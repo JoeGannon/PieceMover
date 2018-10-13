@@ -1,8 +1,7 @@
-﻿namespace PieceMover
+﻿namespace PieceMover.Moves
 {
     using System.Linq;
     using ExternalInput;
-    using Moves;
     using Pieces;
 
     public class Promotion : Input
